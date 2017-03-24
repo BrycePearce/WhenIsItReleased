@@ -17,16 +17,12 @@ class Container extends React.Component {
     this.textInput.focus();
   }
 
-  //CONSUME THE API (get imdb info from this later)
   populate(keystrokes) {
     let query = "http://www.omdbapi.com/?s=";
-    console.log("welcome to populate, keystroke: " + keystrokes);
     fetch(query + keystrokes)
       .then((response) => {
         response.json().then((json) => {
-          console.log("oh heyoo " + JSON.stringify(json.Search[0].imdbID));
-           this.setState({ results: json.Search });
-          //return "http://www.omdbapi.com/?i=t" + json.Search.imdbID;
+          this.setState({ results: json.Search });
         });
       });
   }
@@ -46,6 +42,4 @@ class Container extends React.Component {
   }
 }
 
-//first param is what we want to render, second param is where we render it
-//(don't change this)
 render(<Container />, document.getElementById('container'));
