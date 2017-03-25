@@ -1,6 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
-import ResultLi from './ResultLi';
+import ResultList from './ResultList';
+import ResultItem from './ResultItem';
 import InputBox from './InputBox';
 
 class Container extends React.Component {
@@ -34,8 +35,8 @@ class Container extends React.Component {
         <div className="inputBoxArea">
           <InputBox onChange={this.populate.bind(this)} />
         </div>
-        <div className="resultLiArea">
-          <ResultLi className="resultsLiText" list={this.state.results} />
+        <div className="resultListArea">
+          <ResultList className="resultListText" list={this.state.results} />
         </div>
       </div>
     )
