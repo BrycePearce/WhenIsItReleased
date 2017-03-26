@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+* {
+  font-family: Roboto;
+  font-size: 14px;
+}
+
+.detailsContainer {
+  position: absolute;
+  background:rgba(28, 28,28, 0.9);
+  color: white;
+  width: 800px;
+  box-shadow: 0 0 75px 25px rgba(0, 0, 0, .65);
+  top: calc(50% - 700px / 2);
+  left: calc(50% - 800px / 2);
+}
+
+.mainInfo {
+    display: flex;
+}
+
+.title {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+    font-size: 24px;
+}
+
+
+
+.plot {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.headerTextElements {
+    display: flex;
+    flex-direction: column;
+}
+
+.detailsPoster {
+  max-height: 450px;
+  max-width: 300x;
+}

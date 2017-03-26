@@ -4,13 +4,17 @@ import React from 'react';
 class ResultItem extends React.Component {
 
   handleClick(imdbid) {
-
-    console.log(imdbid);
     //release date/etc query
     fetch('http://www.omdbapi.com/?i=' + imdbid)
       .then((response) => {
         response.json().then((json) => {
-          this.setState({ imdbInfo: json });
+          imdbInfo: json
+          this.context.router.push({
+            pathname: 'details',
+            state: {
+              info: json
+            }
+          });
         });
       });
   }
@@ -27,5 +31,9 @@ class ResultItem extends React.Component {
     )
   }
 }
+//request the router context in your component
+ResultItem.contextTypes = {
+    router: React.PropTypes.object
+};
 
 export default ResultItem;

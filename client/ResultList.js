@@ -3,6 +3,7 @@ import ResultItem from './ResultItem';
 
 class ResultList extends React.Component {
 
+  //query for imdbID, send it to resultItem
   handleClick(eventLi) {
     //release date/etc query
     fetch('http://www.omdbapi.com/?i=' + eventLi.imdbID)
@@ -38,6 +39,4 @@ class ResultList extends React.Component {
     )
   }
 }
-
-
 export default ResultList;

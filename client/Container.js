@@ -43,4 +43,4 @@ class Container extends React.Component {
   }
 }
 
-render(<Container />, document.getElementById('container'));
+export default Container;
