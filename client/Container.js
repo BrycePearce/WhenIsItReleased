@@ -31,7 +31,7 @@ class Container extends React.Component {
   render() {
     return (
       <div className="contentContainer">
-        <h1>Possible Results</h1>
+        <h1>Enter a movie</h1>
         <div className="inputBoxArea">
           <InputBox onChange={this.populate.bind(this)} />
         </div>
