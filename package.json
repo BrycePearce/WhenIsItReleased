@@ -21,6 +21,7 @@
   "homepage": "https://github.com/BrycePearce/WhenIsItReleasedOMDB#readme",
   "dependencies": {
     "express": "^4.14.1",
+    "moment": "^2.18.1",
     "nodemon": "^1.11.0",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",

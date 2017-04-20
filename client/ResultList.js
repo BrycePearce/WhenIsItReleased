@@ -16,14 +16,10 @@ class ResultList extends React.Component {
   }
 
   render() {
-    let poster = '';
-    let description = '';
-    let rating = '';
     //handle null cases
     if (this.props.list == undefined) {
       return null;
     }
-
     let resultItems = this.props.list.map((eventLi, index) => {
       //send props to ResultItem
       return <ResultItem key={index} name={eventLi.Title} imdbid={eventLi.imdbID} releaseYear={eventLi.Year} />

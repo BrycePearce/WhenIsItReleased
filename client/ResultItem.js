@@ -4,7 +4,7 @@ import React from 'react';
 class ResultItem extends React.Component {
 
   handleClick(imdbid) {
-    //release date/etc query
+    //query with imdbid, get new info and send it to details page
     fetch('http://www.omdbapi.com/?i=' + imdbid)
       .then((response) => {
         response.json().then((json) => {
@@ -20,10 +20,7 @@ class ResultItem extends React.Component {
   }
 
   render() {
-    let poster = '';
-    let description = '';
-    let rating = '';
-
+    {/* onClick bind -> When li is clicked, we send the items imdbId to handleClick and run our query. */ }
     return (
       <li onClick={this.handleClick.bind(this, this.props.imdbid)}>
         <div className="liTitleYear">{this.props.name + ' (' + this.props.releaseYear + ')'}</div>
@@ -33,7 +30,7 @@ class ResultItem extends React.Component {
 }
 //request the router context in your component
 ResultItem.contextTypes = {
-    router: React.PropTypes.object
+  router: React.PropTypes.object
 };
 
 export default ResultItem;
