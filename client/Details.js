@@ -2,6 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom'; //for componentDidMount
 import moment from 'moment';
 import Key from './Key';
+import Fresh from './static/fresh.png';
+import NotFresh from './static/notfresh.png';
+//import imdb from './static/imdb.png';
+import tmdb from './static/tmdbLogo.png';
+import mta from './static/mta.png';
+
 class Details extends React.Component {
 
   //run the query when details page loads
@@ -9,6 +15,7 @@ class Details extends React.Component {
     fetch('http://api.themoviedb.org/3/movie/' + this.props.location.state.info.imdbID + "?api_key=" + Key + '&append_to_response=release_dates')
       .then((response) => {
         response.json().then((json) => {
+          //document.body.style.backgroundImage = "url('https://image.tmdb.org/t/p/w1920" + json.backdrop_path + "')";
           this.setState({ tmbdInfo: json });
         });
       });
@@ -20,6 +27,7 @@ class Details extends React.Component {
     let rtRating = '';
     let metaRating = '';
     let backdrop = '';
+    let rtImage = Fresh;
     if (this.state === null || this.state.tmbdInfo.release_dates === undefined) {
       return null;
     } else {
@@ -27,8 +35,9 @@ class Details extends React.Component {
       releaseDate = this.props.location.state.info.DVD;
       imdbRating = this.props.location.state.info.imdbRating;
       rtRating = this.props.location.state.info.Ratings[1].Value;
-      metaRating = this.props.location.state.info.Ratings[2].Value;
-
+      rtRating = rtRating.replace(/[%]/g, "");
+      console.log(rtRating);
+      //metaRating = this.props.location.state.info.Ratings[2].Value;
       //if we can't find the release date with OMDB, search using TMDB api
       if (this.props.location.state.info.DVD === "N/A") {
         //find the date for US release
@@ -43,7 +52,7 @@ class Details extends React.Component {
                 else if (releasePath.results[i].release_dates[q].type == "5") {
                   releaseDate = moment(releasePath.results[i].release_dates[q].release_date).format('MMMM Do YYYY');
                 }
-                else releaseDate = "No date found";
+                else releaseDate = "No US release found";
               }
               break;
             }
@@ -52,22 +61,26 @@ class Details extends React.Component {
           releaseDate = "No date found";
         }
       }
-
-
-
-
-
+      console.log(rtRating);
+      //rt rating
+      if (rtRating < 90) {
+        console.log("asd");
+        rtImage = NotFresh;
+      }
     }
+
+
+    /*
+    <img className="rating" src={rtImage} /> {rtRating}
+    <img className="rating" src={mta} /> {metaRating}
+    */
+
     return (
       <div className="detailsContainer">
         <img className="detailsPoster" src={this.props.location.state.info.Poster} />
-        <div className="ratings">
-          <p>(imdb){imdbRating}</p>
-          <p>(rt)</p> {rtRating}
-          <p>(meta)</p> {metaRating}
-        </div>
         <div className="mainInfo">
           <div>
+            <img className="rating" src={rtImage} /> {rtRating}
             <div className="title">{this.props.location.state.info.Title} </div>
             <div className="releaseDate">{releaseDate}</div>
             <div className="plot">{this.props.location.state.info.Plot} </div>

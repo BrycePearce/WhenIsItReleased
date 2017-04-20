@@ -6,7 +6,7 @@ import { Router, Route, browserHistory, Redirect } from 'react-router';
 render((
   <Router history={browserHistory}>
     <Route path="/" component={Container} />
-    <Route path="/details" component={Details} />
+    <Route path="/details/:id" component={Details} />
     <Redirect from="*" to="/" />
 
   </Router>

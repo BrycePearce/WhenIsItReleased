@@ -65,10 +65,18 @@ h1 {
 .title {
   display: flex;
   justify-content: center;
-  margin-top: 50px;
-  font-size: 30px;
+  margin-top: 30px;
+  font-size: 25px;
 }
 
+.releaseDate {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+  font-size: 30px;
+  font-weight: bold;
+  color: #162b2d;
+}
 .inputArea {
   width: 298px;
   text-align: center;

@@ -10,7 +10,7 @@ class ResultItem extends React.Component {
         response.json().then((json) => {
           imdbInfo: json
           this.context.router.push({
-            pathname: 'details',
+            pathname: 'details/' + imdbid,
             state: {
               info: json
             }
