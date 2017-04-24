@@ -3,7 +3,7 @@ import { render } from 'react-dom';
 import ResultList from './ResultList';
 import ResultItem from './ResultItem';
 import InputBox from './InputBox';
-
+import Logo from './Logo';
 class Container extends React.Component {
   constructor(props) {
     super(props)
@@ -30,14 +30,17 @@ class Container extends React.Component {
 
   render() {
     return (
-      <div className="contentContainer">
-        <h1>Enter a movie</h1>
-        <div className="inputBoxArea">
-          <InputBox onChange={this.populate.bind(this)} />
+      <div>
+        <div className="contentContainer">
+          <h1>Enter a movie</h1>
+          <div className="inputBoxArea">
+            <InputBox onChange={this.populate.bind(this)} />
+          </div>
+          <div className="resultListArea">
+            <ResultList className="resultListText" list={this.state.results} />
+          </div>
         </div>
-        <div className="resultListArea">
-          <ResultList className="resultListText" list={this.state.results} />
-        </div>
+        <Logo />
       </div>
     )
   }

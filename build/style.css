@@ -156,3 +156,28 @@ h1 {
   box-shadow: inset 0 -3px 0 #334a4c;
   margin-right: 5px;
 }
+
+/*TODO: fix ratings so they are aligned in a column properly. Remove some padding from title so that ratings will fit
+
+May need to do left/right columns similar to the misc info
+*/
+.ratings {
+display: flex;
+/*flex-direction: column;*/
+}
+/*TODO: add media query for TM, so it adjusts correctly on mobile*/
+.tmdbTM {
+    position:absolute;
+    bottom:0;
+    right:0;
+    margin: 10px;
+    font-size: 10px;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid rgba(0,0,0,0.50);
+    border-bottom: none;
+    padding: 10px;
+}
