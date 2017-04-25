@@ -51,7 +51,12 @@ class Details extends React.Component {
       else {
         poster = this.props.location.state.info.Poster;
       }
-      metaRating = this.props.location.state.info.Ratings[2].Value;
+      console.log(this.props.location.state.info);
+      if (this.props.location.state.info.Ratings.length <= 2) {
+        metaRating = "N/A";
+      } else {
+        metaRating = this.props.location.state.info.Ratings[2].Value;
+      }
       //if we can't find the release date with OMDB, search using TMDB api
       if (this.props.location.state.info.DVD === "N/A") {
         //find the date for US release
@@ -75,7 +80,6 @@ class Details extends React.Component {
           releaseDate = "No date found";
         }
       }
-      console.log(rtRating);
       //rt rating
       if (rtRating <= 60) {
         rtImage = NotFresh;
@@ -89,9 +93,18 @@ class Details extends React.Component {
           <div className="mainInfo">
             <div>
               <div className="ratings">
-                <img className="rating" src={rtImage} /> {rtRating}
-                <img className="rating" src={mta} /> {metaRating}
-                <img className="rating" src={imdb} /> {imdbRating}
+                <div className="rating">
+                  <img className="image" src={rtImage} />
+                  <span>{rtRating}</span>
+                </div>
+                <div className="rating">
+                  <img className="image" src={mta} />
+                  <span>{metaRating}</span>
+                </div>
+                <div className="rating">
+                  <img className="image" src={imdb} />
+                  <span>{imdbRating}</span>
+                </div>
               </div>
               <div className="title">{this.props.location.state.info.Title} </div>
               <div className="releaseDate">{releaseDate}</div>
