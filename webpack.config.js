@@ -6,7 +6,7 @@ module.exports = {
   entry: ['./client/router.js'],
   output: {
     path: BUILD_DIR,
-    filename: 'dvdInfo.js'
+    filename: 'dvdinfo.js'
   },
   module: {
     loaders: [
