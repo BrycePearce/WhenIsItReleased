@@ -9,81 +9,93 @@ import mta from './static/mta.png';
 import ratingnotfound from './static/ratingnotfound.png';
 import posternotfound from './static/notfound.png';
 import Logo from './Logo';
+
 class Details extends React.Component {
 
-  //run the query when details page loads
-  componentDidMount() {
-    //TODO: add handler for shows/movies that don't exist here. (e.g. Steven Universe)
-    fetch('http://api.themoviedb.org/3/movie/' + this.props.location.state.info.imdbID + "?api_key=" + Key + '&append_to_response=release_dates')
+  constructor(props) {
+    super(props);
+    //if there are no props, set state to null
+    this.state = {
+      info: this.props.location.state ? this.props.location.state.info : null,
+      dvdRelease: ''
+    };
+
+  }
+
+  componentWillMount() {
+    let releaseDate = '';
+
+    //OMDB call for external load
+    if (!this.state.info) {
+      console.log("external load");
+      fetch('http://www.omdbapi.com/?i=' + this.props.params.id)
+        .then((response) => {
+          response.json().then((json) => {
+            this.setState({ info: json });
+          });
+        });
+    }
+
+    //TMDB
+    fetch('http://api.themoviedb.org/3/movie/' + this.props.params.id + "?api_key=" + Key + '&append_to_response=release_dates')
       .then((response) => {
         response.json().then((json) => {
-          //document.body.style.backgroundImage = "url('https://image.tmdb.org/t/p/w1920" + json.backdrop_path + "')";
-          this.setState({ tmbdInfo: json });
+          //check if there is a valid dvd release date
+          if (json.release_dates.results[9].release_dates[3]) {
+            console.log("TMDB found it");
+            console.log(json.release_dates.results[9].release_dates[3].release_date);
+            releaseDate = moment(json.release_dates.results[9].release_dates[3].release_date).format('MMM Do YYYY');
+            this.setState({ dvdRelease: releaseDate });
+          }
+
+          //OMDB (only calling this if there is no TMDB release date)
+          if (releaseDate === '') {
+            fetch('http://www.omdbapi.com/?i=' + this.props.params.id)
+              .then((response) => {
+                response.json().then((json) => {
+                  console.log("OMDB found it");
+                  console.log(json.DVD);
+                  this.setState({ dvdRelease: json.DVD });
+                });
+              });
+          }
         });
       });
   }
 
   render() {
-    let releaseDate = '';
+    if (!this.state.info) {
+      return <div>Loading...</div>
+    }
+    let releaseDate = this.state.dvdRelease;
     let imdbRating = '';
     let rtRating = '';
     let metaRating = '';
     let poster = '';
     let rtImage = Fresh;
-    if (this.state === null || this.state.tmbdInfo.release_dates === undefined) {
-      return null;
+    imdbRating = this.state.info.imdbRating;
+
+    if (this.state.info.Ratings.length <= 1) {
+      rtRating = "N/A";
+      rtImage = ratingnotfound;
     } else {
-      const releasePath = this.state.tmbdInfo.release_dates;
-      releaseDate = this.props.location.state.info.DVD;
-      //console.log(releaseDate);
-      imdbRating = this.props.location.state.info.imdbRating;
+      rtRating = this.state.info.Ratings[1].Value;
+    }
 
-      if (this.props.location.state.info.Ratings.length <= 1) {
-        rtRating = "N/A";
-        rtImage = ratingnotfound;
-      } else {
-        rtRating = this.props.location.state.info.Ratings[1].Value;
-      }
-
-      if (this.props.location.state.info.Poster == "N/A") {
-        poster = posternotfound;
-      }
-      else {
-        poster = this.props.location.state.info.Poster;
-      }
-      console.log(this.props.location.state.info);
-      if (this.props.location.state.info.Ratings.length <= 2) {
-        metaRating = "N/A";
-      } else {
-        metaRating = this.props.location.state.info.Ratings[2].Value;
-      }
-      //if we can't find the release date with OMDB, search using TMDB api
-      if (this.props.location.state.info.DVD === "N/A") {
-        //find the date for US release
-        if (releasePath.results.length > 0) {
-          for (var i = 0; i < releasePath.results.length; i += 1) {
-            if (releasePath.results[i].iso_3166_1 == "US") {
-              //now find the type: 4 digital, 5 physical
-              for (var q = 0; q < releasePath.results[i].release_dates.length; q += 1) {
-                if (releasePath.results[i].release_dates[q].type == "4") {
-                  releaseDate = moment(releasePath.results[i].release_dates[q].release_date).format('MMMM Do YYYY');
-                }
-                else if (releasePath.results[i].release_dates[q].type == "5") {
-                  releaseDate = moment(releasePath.results[i].release_dates[q].release_date).format('MMMM Do YYYY');
-                }
-                else releaseDate = "No US release found";
-              }
-              break;
-            }
-          }
-        } else {
-          releaseDate = "No date found";
-        }
-      }
-      //rt rating
-      if (rtRating <= 60) {
-        rtImage = NotFresh;
-      }
+    if (this.state.info.Poster == "N/A") {
+      poster = posternotfound;
+    }
+    else {
+      poster = this.state.info.Poster;
+    }
+    if (this.state.info.Ratings.length <= 2) {
+      metaRating = "N/A";
+    } else {
+      metaRating = this.state.info.Ratings[2].Value;
+    }
+    //rt rating
+    if (rtRating <= 60) {
+      rtImage = NotFresh;
     }
 
     return (
@@ -106,17 +118,17 @@ class Details extends React.Component {
                   <span>{imdbRating}</span>
                 </div>
               </div>
-              <div className="title">{this.props.location.state.info.Title} </div>
+              <div className="title">{this.state.info.Title} </div>
               <div className="releaseDate">{releaseDate}</div>
-              <div className="plot">{this.props.location.state.info.Plot} </div>
+              <div className="plot">{this.state.info.Plot} </div>
               <div className="overviewDetailsArea">
                 <div className="left">
-                  <div className="details"> <p>Country</p>{this.props.location.state.info.Country} </div>
-                  <div className="details"> <p>Rating</p>{this.props.location.state.info.Rated} </div>
+                  <div className="details"> <p>Country</p>{this.state.info.Country} </div>
+                  <div className="details"> <p>Rating</p>{this.state.info.Rated} </div>
                 </div>
                 <div className="right">
-                  <div className="details"> <p>Genre</p>{this.props.location.state.info.Genre} </div>
-                  <div className="details"> <p>Runtime</p>{this.props.location.state.info.Runtime} </div>
+                  <div className="details"> <p>Genre</p>{this.state.info.Genre} </div>
+                  <div className="details"> <p>Runtime</p>{this.state.info.Runtime} </div>
                 </div>
               </div>
             </div>

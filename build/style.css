@@ -70,12 +70,13 @@ h1 {
   display: flex;
   justify-content: center;
   font-size: 25px;
+  margin-top: 10px;
 }
 
 .releaseDate {
   display: flex;
   justify-content: center;
-  margin-top: 40px;
+  margin-top: 35px;
   font-size: 30px;
   font-weight: bold;
   color: #162b2d;

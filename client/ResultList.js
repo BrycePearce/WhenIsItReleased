@@ -23,9 +23,7 @@ class ResultList extends React.Component {
     let resultItems = this.props.list.map((eventLi, index) => {
       //send props to ResultItem
       return <ResultItem key={index} name={eventLi.Title} imdbid={eventLi.imdbID} releaseYear={eventLi.Year} />
-    })
-
-
+    });
 
     //render everything using an ordered list
     return (

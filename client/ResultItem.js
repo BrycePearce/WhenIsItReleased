@@ -8,7 +8,6 @@ class ResultItem extends React.Component {
     fetch('http://www.omdbapi.com/?i=' + imdbid)
       .then((response) => {
         response.json().then((json) => {
-          imdbInfo: json
           this.context.router.push({
             pathname: 'details/' + imdbid,
             state: {
