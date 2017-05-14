@@ -14,7 +14,7 @@ class Details extends React.Component {
 
   constructor(props) {
     super(props);
-    //if there are no props, set state to null
+    //if we have props, use them, otherwise set info to null
     this.state = {
       info: this.props.location.state ? this.props.location.state.info : null,
       dvdRelease: ''
@@ -27,7 +27,6 @@ class Details extends React.Component {
 
     //OMDB call for external load
     if (!this.state.info) {
-      console.log("external load");
       fetch('http://www.omdbapi.com/?i=' + this.props.params.id)
         .then((response) => {
           response.json().then((json) => {
@@ -42,25 +41,21 @@ class Details extends React.Component {
         response.json().then((json) => {
           //check if there is a valid dvd release date
           if (json.release_dates.results[9].release_dates[3]) {
-            console.log("TMDB found it");
-            console.log(json.release_dates.results[9].release_dates[3].release_date);
             releaseDate = moment(json.release_dates.results[9].release_dates[3].release_date).format('MMM Do YYYY');
             this.setState({ dvdRelease: releaseDate });
           }
-
           //OMDB (only calling this if there is no TMDB release date)
           if (releaseDate === '') {
             fetch('http://www.omdbapi.com/?i=' + this.props.params.id)
               .then((response) => {
                 response.json().then((json) => {
-                  console.log("OMDB found it");
-                  console.log(json.DVD);
                   this.setState({ dvdRelease: json.DVD });
                 });
               });
           }
         });
       });
+
   }
 
   render() {
@@ -96,6 +91,9 @@ class Details extends React.Component {
     //rt rating
     if (rtRating <= 60) {
       rtImage = NotFresh;
+    }
+    if (this.state.dvdRelease === undefined || this.state.dvdRelease === "") {
+      releaseDate = "unknown";
     }
 
     return (
