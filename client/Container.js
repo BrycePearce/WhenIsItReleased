@@ -4,6 +4,7 @@ import ResultList from './ResultList';
 import ResultItem from './ResultItem';
 import InputBox from './InputBox';
 import Logo from './Logo';
+import OmdbKey from './OmdbKey';
 class Container extends React.Component {
   constructor(props) {
     super(props)
@@ -20,7 +21,7 @@ class Container extends React.Component {
 
   populate(keystrokes) {
     let query = "http://www.omdbapi.com/?s=";
-    fetch(query + keystrokes)
+    fetch(query + keystrokes + '&apikey=' + OmdbKey )
       .then((response) => {
         response.json().then((json) => {
           this.setState({ results: json.Search });

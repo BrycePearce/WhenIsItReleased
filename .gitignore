@@ -1,3 +1,4 @@
 node_modules/
 build/dvdInfo*
 Key.js
+OmdbKey.js

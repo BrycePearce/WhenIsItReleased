@@ -9,6 +9,7 @@ import mta from './static/mta.png';
 import ratingnotfound from './static/ratingnotfound.png';
 import posternotfound from './static/notfound.png';
 import Logo from './Logo';
+import OmdbKey from './OmdbKey';
 
 class Details extends React.Component {
 
@@ -19,7 +20,6 @@ class Details extends React.Component {
       info: this.props.location.state ? this.props.location.state.info : null,
       dvdRelease: ''
     };
-
   }
 
   componentWillMount() {
@@ -27,7 +27,7 @@ class Details extends React.Component {
 
     //OMDB call for external load
     if (!this.state.info) {
-      fetch('http://www.omdbapi.com/?i=' + this.props.params.id)
+      fetch('http://www.omdbapi.com/?i=' + this.props.params.id + '&apikey=' + OmdbKey)
         .then((response) => {
           response.json().then((json) => {
             this.setState({ info: json });
@@ -39,14 +39,31 @@ class Details extends React.Component {
     fetch('http://api.themoviedb.org/3/movie/' + this.props.params.id + "?api_key=" + Key + '&append_to_response=release_dates')
       .then((response) => {
         response.json().then((json) => {
-          //check if there is a valid dvd release date
-          if (json.release_dates.results[9].release_dates[3]) {
-            releaseDate = moment(json.release_dates.results[9].release_dates[3].release_date).format('MMM Do YYYY');
-            this.setState({ dvdRelease: releaseDate });
+          const releasePath = json.release_dates
+
+          //find the date for US release
+          if (releasePath.results.length > 0) {
+            for (let i = 0; i < releasePath.results.length; i += 1) {
+              //find the US release array #
+              if (releasePath.results[i].iso_3166_1 == "US") {
+                //now find the type: 4 digital, 5 physical
+                for (let q = 0; q < releasePath.results[i].release_dates.length; q += 1) {
+                  if (releasePath.results[i].release_dates[q].type == "4") {
+                    releaseDate = moment(releasePath.results[i].release_dates[q].release_date).format('MMMM Do YYYY');
+                  }
+                  else if (releasePath.results[i].release_dates[q].type == "5") {
+                    releaseDate = moment(releasePath.results[i].release_dates[q].release_date).format('MMMM Do YYYY');
+                  }
+                }
+                this.setState({ dvdRelease: releaseDate });
+                break;
+              }
+            }
           }
+
           //OMDB (only calling this if there is no TMDB release date)
           if (releaseDate === '') {
-            fetch('http://www.omdbapi.com/?i=' + this.props.params.id)
+            fetch('http://www.omdbapi.com/?i=' + this.props.params.id + '&apikey=' + OmdbKey)
               .then((response) => {
                 response.json().then((json) => {
                   this.setState({ dvdRelease: json.DVD });
@@ -60,7 +77,7 @@ class Details extends React.Component {
 
   render() {
     if (!this.state.info) {
-      return <div>Loading...</div>
+      return <div>Not found</div>
     }
     let releaseDate = this.state.dvdRelease;
     let imdbRating = '';

@@ -1,12 +1,12 @@
 import React from 'react';
 import ResultItem from './ResultItem';
-
+import OmdbKey from './OmdbKey';
 class ResultList extends React.Component {
 
   //query for imdbID, send it to resultItem
   handleClick(eventLi) {
     //release date/etc query
-    fetch('http://www.omdbapi.com/?i=' + eventLi.imdbID)
+    fetch('http://www.omdbapi.com/?i=' + eventLi.imdbID + '&apikey=' + OmdbKey)
       .then((response) => {
         response.json().then((json) => {
           //query for imdbID for each item, which we sent to ResultItem

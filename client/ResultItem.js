@@ -1,11 +1,12 @@
 import React from 'react';
-
+import OmdbKey from './OmdbKey';
+import PropTypes from 'prop-types'; // ES6 
 
 class ResultItem extends React.Component {
 
   handleClick(imdbid) {
     //query with imdbid, get new info and send it to details page
-    fetch('http://www.omdbapi.com/?i=' + imdbid)
+    fetch('http://www.omdbapi.com/?i=' + imdbid + '&apikey=' + OmdbKey)
       .then((response) => {
         response.json().then((json) => {
           this.context.router.push({
@@ -29,7 +30,7 @@ class ResultItem extends React.Component {
 }
 //request the router context in your component
 ResultItem.contextTypes = {
-  router: React.PropTypes.object
+  router: PropTypes.object
 };
 
 export default ResultItem;
